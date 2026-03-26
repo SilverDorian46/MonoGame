@@ -10,25 +10,25 @@ namespace Microsoft.Xna.Framework.Graphics
     /// <summary>
     /// Helper class for drawing text strings and sprites in one or more optimized batches.
     /// </summary>
-	public class SpriteBatch : GraphicsResource
-	{
+    public class SpriteBatch : GraphicsResource
+    {
         #region Private Fields
         readonly SpriteBatcher _batcher;
 
-		SpriteSortMode _sortMode;
-		BlendState _blendState;
-		SamplerState _samplerState;
-		DepthStencilState _depthStencilState; 
-		RasterizerState _rasterizerState;		
-		Effect _effect;
+        SpriteSortMode _sortMode;
+        BlendState _blendState;
+        SamplerState _samplerState;
+        DepthStencilState _depthStencilState; 
+        RasterizerState _rasterizerState;		
+        Effect _effect;
         bool _beginCalled;
 
-		SpriteEffect _spriteEffect;
+        SpriteEffect _spriteEffect;
         readonly EffectPass _spritePass;
 
-		Rectangle _tempRect = new Rectangle (0,0,0,0);
-		Vector2 _texCoordTL = new Vector2 (0,0);
-		Vector2 _texCoordBR = new Vector2 (0,0);
+        Rectangle _tempRect = new Rectangle (0,0,0,0);
+        Vector2 _texCoordTL = new Vector2 (0,0);
+        Vector2 _texCoordBR = new Vector2 (0,0);
         #endregion
 
         /// <summary>
@@ -47,13 +47,13 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="capacity">The initial capacity of the internal array holding batch items (the value will be rounded to the next multiple of 64).</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="graphicsDevice"/> is null.</exception>
         public SpriteBatch (GraphicsDevice graphicsDevice, int capacity)
-		{
-			if (graphicsDevice == null)
+        {
+            if (graphicsDevice == null)
             {
-				throw new ArgumentNullException ("graphicsDevice", FrameworkResources.ResourceCreationWhenDeviceIsNull);
-			}	
+                throw new ArgumentNullException ("graphicsDevice", FrameworkResources.ResourceCreationWhenDeviceIsNull);
+            }	
 
-			this.GraphicsDevice = graphicsDevice;
+            this.GraphicsDevice = graphicsDevice;
 
             _spriteEffect = new SpriteEffect(graphicsDevice);
             _spritePass = _spriteEffect.CurrentTechnique.Passes[0];
@@ -61,7 +61,7 @@ namespace Microsoft.Xna.Framework.Graphics
             _batcher = new SpriteBatcher(graphicsDevice, capacity);
 
             _beginCalled = false;
-		}
+        }
 
         /// <summary>
         /// Begins a new sprite and text batch with the specified render state.
@@ -112,30 +112,30 @@ namespace Microsoft.Xna.Framework.Graphics
         /// Flushes all batched text and sprites to the screen.
         /// </summary>
         /// <remarks>This command should be called after <see cref="Begin"/> and drawing commands.</remarks>
-		public void End ()
-		{
+        public void End ()
+        {
             if (!_beginCalled)
                 throw new InvalidOperationException("Begin must be called before calling End.");
 
-			_beginCalled = false;
+            _beginCalled = false;
 
-			if (_sortMode != SpriteSortMode.Immediate)
-				Setup();
+            if (_sortMode != SpriteSortMode.Immediate)
+                Setup();
             
             _batcher.DrawBatch(_sortMode, _effect);
         }
-		
-		void Setup() 
+        
+        void Setup() 
         {
             var gd = GraphicsDevice;
-			gd.BlendState = _blendState;
-			gd.DepthStencilState = _depthStencilState;
-			gd.RasterizerState = _rasterizerState;
-			gd.SamplerStates[0] = _samplerState;
+            gd.BlendState = _blendState;
+            gd.DepthStencilState = _depthStencilState;
+            gd.RasterizerState = _rasterizerState;
+            gd.SamplerStates[0] = _samplerState;
 
             _spritePass.Apply();
-		}
-		
+        }
+        
         void CheckValid(Texture2D texture)
         {
             if (texture == null)
@@ -176,16 +176,16 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="scale">A scaling of this sprite.</param>
         /// <param name="effects">Modificators for drawing. Can be combined.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
-		public void Draw (Texture2D texture,
-				Vector2 position,
-				Rectangle? sourceRectangle,
-				Color color,
-				float rotation,
-				Vector2 origin,
-				Vector2 scale,
-				SpriteEffects effects,
+        public void Draw (Texture2D texture,
+                Vector2 position,
+                Rectangle? sourceRectangle,
+                Color color,
+                float rotation,
+                Vector2 origin,
+                Vector2 scale,
+                SpriteEffects effects,
                 float layerDepth)
-		{
+        {
             CheckValid(texture);
 
             var item = _batcher.CreateBatchItem();
@@ -232,14 +232,14 @@ namespace Microsoft.Xna.Framework.Graphics
             if ((effects & SpriteEffects.FlipVertically) != 0)
             {
                 var temp = _texCoordBR.Y;
-				_texCoordBR.Y = _texCoordTL.Y;
-				_texCoordTL.Y = temp;
+                _texCoordBR.Y = _texCoordTL.Y;
+                _texCoordTL.Y = temp;
             }
             if ((effects & SpriteEffects.FlipHorizontally) != 0)
             {
                 var temp = _texCoordBR.X;
-				_texCoordBR.X = _texCoordTL.X;
-				_texCoordTL.X = temp;
+                _texCoordBR.X = _texCoordTL.X;
+                _texCoordTL.X = temp;
             }
             
             if (rotation == 0f)
@@ -270,7 +270,7 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             
             FlushIfNeeded();
-		}
+        }
 
         /// <summary>
         /// Submit a sprite for drawing in the current batch.
@@ -284,19 +284,19 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="scale">A scaling of this sprite.</param>
         /// <param name="effects">Modificators for drawing. Can be combined.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
-		public void Draw (Texture2D texture,
-				Vector2 position,
-				Rectangle? sourceRectangle,
-				Color color,
-				float rotation,
-				Vector2 origin,
-				float scale,
-				SpriteEffects effects,
+        public void Draw (Texture2D texture,
+                Vector2 position,
+                Rectangle? sourceRectangle,
+                Color color,
+                float rotation,
+                Vector2 origin,
+                float scale,
+                SpriteEffects effects,
                 float layerDepth)
-		{
+        {
             var scaleVec = new Vector2(scale, scale);
             Draw(texture, position, sourceRectangle, color, rotation, origin, scaleVec, effects, layerDepth);
-		}
+        }
 
         /// <summary>
         /// Submit a sprite for drawing in the current batch.
@@ -309,15 +309,15 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="origin">Center of the rotation. 0,0 by default.</param>
         /// <param name="effects">Modificators for drawing. Can be combined.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
-		public void Draw (Texture2D texture,
-			Rectangle destinationRectangle,
-			Rectangle? sourceRectangle,
-			Color color,
-			float rotation,
-			Vector2 origin,
-			SpriteEffects effects,
+        public void Draw (Texture2D texture,
+            Rectangle destinationRectangle,
+            Rectangle? sourceRectangle,
+            Color color,
+            float rotation,
+            Vector2 origin,
+            SpriteEffects effects,
             float layerDepth)
-		{
+        {
             CheckValid(texture);
             
             var item = _batcher.CreateBatchItem();
@@ -366,21 +366,21 @@ namespace Microsoft.Xna.Framework.Graphics
                 origin.Y = origin.Y * (float)destinationRectangle.Height * texture.TexelHeight;
             }
             
-			if ((effects & SpriteEffects.FlipVertically) != 0)
+            if ((effects & SpriteEffects.FlipVertically) != 0)
             {
                 var temp = _texCoordBR.Y;
-				_texCoordBR.Y = _texCoordTL.Y;
-				_texCoordTL.Y = temp;
-			}
-			if ((effects & SpriteEffects.FlipHorizontally) != 0)
+                _texCoordBR.Y = _texCoordTL.Y;
+                _texCoordTL.Y = temp;
+            }
+            if ((effects & SpriteEffects.FlipHorizontally) != 0)
             {
                 var temp = _texCoordBR.X;
-				_texCoordBR.X = _texCoordTL.X;
-				_texCoordTL.X = temp;
-			}
+                _texCoordBR.X = _texCoordTL.X;
+                _texCoordTL.X = temp;
+            }
 
-		    if (rotation == 0f)
-		    {
+            if (rotation == 0f)
+            {
                 item.Set(destinationRectangle.X - origin.X,
                         destinationRectangle.Y - origin.Y,
                         destinationRectangle.Width,
@@ -391,7 +391,7 @@ namespace Microsoft.Xna.Framework.Graphics
                         layerDepth);
             }
             else
-		    {
+            {
                 item.Set(destinationRectangle.X,
                         destinationRectangle.Y,
                         -origin.X,
@@ -406,17 +406,405 @@ namespace Microsoft.Xna.Framework.Graphics
                         layerDepth);
             }
 
-			FlushIfNeeded();
-		}
+            FlushIfNeeded();
+        }
 
-		// Mark the end of a draw operation for Immediate SpriteSortMode.
-		internal void FlushIfNeeded()
-		{
-			if (_sortMode == SpriteSortMode.Immediate)
-			{
-				_batcher.DrawBatch(_sortMode, _effect);
-			}
-		}
+        /// <summary>
+        /// Submit a sprite for drawing in the current batch, with shearing applied to it.
+        /// </summary>
+        /// <param name="texture">A texture.</param>
+        /// <param name="position">The drawing location on screen.</param>
+        /// <param name="sourceRectangle">An optional region on the texture which will be rendered. If null - draws full texture.</param>
+        /// <param name="color">A color mask.</param>
+        /// <param name="rotation">A rotation of this sprite.</param>
+        /// <param name="origin">Center of the rotation. 0,0 by default.</param>
+        /// <param name="scale">A scaling of this sprite.</param>
+        /// <param name="shear">A shearing for this sprite.</param>
+        /// <param name="effects">Modificators for drawing. Can be combined.</param>
+        /// <param name="layerDepth">A depth of the layer of this sprite.</param>
+        public void DrawWithShear(
+            Texture2D texture,
+            Vector2 position,
+            Rectangle? sourceRectangle,
+            Color color,
+            float rotation,
+            Vector2 origin,
+            Vector2 scale,
+            Vector2 shear,
+            SpriteEffects effects,
+            float layerDepth
+        )
+        {
+            CheckValid(texture);
+
+            var item = _batcher.CreateBatchItem();
+            item.Texture = texture;
+
+            // set SortKey based on SpriteSortMode.
+            switch (_sortMode)
+            {
+            // Comparison of Texture objects.
+            case SpriteSortMode.Texture:
+                item.SortKey = texture.SortingKey;
+                break;
+            // Comparison of Depth
+            case SpriteSortMode.FrontToBack:
+                item.SortKey = layerDepth;
+                break;
+            // Comparison of Depth in reverse
+            case SpriteSortMode.BackToFront:
+                item.SortKey = -layerDepth;
+                break;
+            }
+
+            float w, h;
+            if (sourceRectangle.HasValue)
+            {
+                var srcRect = sourceRectangle.GetValueOrDefault();
+                w = srcRect.Width;
+                h = srcRect.Height;
+                _texCoordTL.X = srcRect.X * texture.TexelWidth;
+                _texCoordTL.Y = srcRect.Y * texture.TexelHeight;
+                _texCoordBR.X = (srcRect.X + srcRect.Width) * texture.TexelWidth;
+                _texCoordBR.Y = (srcRect.Y + srcRect.Height) * texture.TexelHeight;
+            }
+            else
+            {
+                w = texture.Width;
+                h = texture.Height;
+                _texCoordTL = Vector2.Zero;
+                _texCoordBR = Vector2.One;
+            }
+
+            if ((effects & SpriteEffects.FlipVertically) != 0)
+            {
+                var temp = _texCoordBR.Y;
+                _texCoordBR.Y = _texCoordTL.Y;
+                _texCoordTL.Y = temp;
+            }
+            if ((effects & SpriteEffects.FlipHorizontally) != 0)
+            {
+                var temp = _texCoordBR.X;
+                _texCoordBR.X = _texCoordTL.X;
+                _texCoordTL.X = temp;
+            }
+
+            if (shear.X == 0f && shear.Y == 0f)
+            {
+                origin *= scale;
+                w *= scale.X;
+                h *= scale.Y;
+
+                if (rotation == 0f)
+                {
+                    item.Set(
+                        position.X - origin.X,
+                        position.Y - origin.Y,
+                        w,
+                        h,
+                        color,
+                        _texCoordTL,
+                        _texCoordBR,
+                        layerDepth
+                    );
+                }
+                else
+                {
+                    item.Set(
+                        position.X,
+                        position.Y,
+                        -origin.X,
+                        -origin.Y,
+                        w,
+                        h,
+                        MathF.Sin(rotation),
+                        MathF.Cos(rotation),
+                        color,
+                        _texCoordTL,
+                        _texCoordBR,
+                        layerDepth
+                    );
+                }
+            }
+            else
+            {
+                if (rotation == 0f)
+                {
+                    item.SetScaleShear(
+                        position.X,
+                        position.Y,
+                        -origin.X,
+                        -origin.Y,
+                        w,
+                        h,
+                        scale.X,
+                        scale.Y,
+                        shear.X,
+                        shear.Y,
+                        color,
+                        _texCoordTL,
+                        _texCoordBR,
+                        layerDepth
+                    );
+                }
+                else
+                {
+                    item.SetScaleShearRotate(
+                        position.X,
+                        position.Y,
+                        -origin.X,
+                        -origin.Y,
+                        w,
+                        h,
+                        scale.X,
+                        scale.Y,
+                        shear.X,
+                        shear.Y,
+                        MathF.Sin(rotation),
+                        MathF.Cos(rotation),
+                        color,
+                        _texCoordTL,
+                        _texCoordBR,
+                        layerDepth
+                    );
+                }
+            }
+
+            FlushIfNeeded();
+        }
+
+        /// <summary>
+        /// Submit a sprite for drawing in the current batch, with a transformation applied to it.
+        /// </summary>
+        /// <param name="texture">A texture.</param>
+        /// <param name="position">The drawing location on screen.</param>
+        /// <param name="sourceRectangle">An optional region on the texture which will be rendered. If null - draws full texture.</param>
+        /// <param name="color">A color mask.</param>
+        /// <param name="origin">Center of the rotation. 0,0 by default.</param>
+        /// <param name="m11">M11 of the transformation matrix.</param>
+        /// <param name="m12">M12 of the transformation matrix.</param>
+        /// <param name="m21">M21 of the transformation matrix.</param>
+        /// <param name="m22">M22 of the transformation matrix.</param>
+        /// <param name="effects">Modificators for drawing. Can be combined.</param>
+        /// <param name="layerDepth">A depth of the layer of this sprite.</param>
+        public void DrawTransformed(
+            Texture2D texture,
+            Vector2 position,
+            Rectangle? sourceRectangle,
+            Color color,
+            Vector2 origin,
+            float m11,
+            float m12,
+            float m21,
+            float m22,
+            SpriteEffects effects,
+            float layerDepth
+        )
+        {
+            CheckValid(texture);
+
+            var item = _batcher.CreateBatchItem();
+            item.Texture = texture;
+
+            // set SortKey based on SpriteSortMode.
+            switch (_sortMode)
+            {
+            // Comparison of Texture objects.
+            case SpriteSortMode.Texture:
+                item.SortKey = texture.SortingKey;
+                break;
+            // Comparison of Depth
+            case SpriteSortMode.FrontToBack:
+                item.SortKey = layerDepth;
+                break;
+            // Comparison of Depth in reverse
+            case SpriteSortMode.BackToFront:
+                item.SortKey = -layerDepth;
+                break;
+            }
+
+            float w, h;
+            if (sourceRectangle.HasValue)
+            {
+                var srcRect = sourceRectangle.GetValueOrDefault();
+                w = srcRect.Width;
+                h = srcRect.Height;
+                _texCoordTL.X = srcRect.X * texture.TexelWidth;
+                _texCoordTL.Y = srcRect.Y * texture.TexelHeight;
+                _texCoordBR.X = (srcRect.X + srcRect.Width) * texture.TexelWidth;
+                _texCoordBR.Y = (srcRect.Y + srcRect.Height) * texture.TexelHeight;
+            }
+            else
+            {
+                w = texture.Width;
+                h = texture.Height;
+                _texCoordTL = Vector2.Zero;
+                _texCoordBR = Vector2.One;
+            }
+
+            if ((effects & SpriteEffects.FlipVertically) != 0)
+            {
+                var temp = _texCoordBR.Y;
+                _texCoordBR.Y = _texCoordTL.Y;
+                _texCoordTL.Y = temp;
+            }
+            if ((effects & SpriteEffects.FlipHorizontally) != 0)
+            {
+                var temp = _texCoordBR.X;
+                _texCoordBR.X = _texCoordTL.X;
+                _texCoordTL.X = temp;
+            }
+
+            item.SetTransformed(
+                position.X,
+                position.Y,
+                -origin.X,
+                -origin.Y,
+                w,
+                h,
+                m11,
+                m12,
+                m21,
+                m22,
+                color,
+                _texCoordTL,
+                _texCoordBR,
+                layerDepth
+            );
+
+            FlushIfNeeded();
+        }
+
+        /// <summary>
+        /// Submit a sprite for drawing in the current batch, with a transformation applied to it.
+        /// </summary>
+        /// <param name="texture">A texture.</param>
+        /// <param name="position">The drawing location on screen.</param>
+        /// <param name="sourceRectangle">An optional region on the texture which will be rendered. If null - draws full texture.</param>
+        /// <param name="color">A color mask.</param>
+        /// <param name="origin">Center of the rotation. 0,0 by default.</param>
+        /// <param name="transformation">A transformation matrix to use.</param>
+        /// <param name="effects">Modificators for drawing. Can be combined.</param>
+        /// <param name="layerDepth">A depth of the layer of this sprite.</param>
+        public void DrawTransformed(
+            Texture2D texture,
+            Vector2 position,
+            Rectangle? sourceRectangle,
+            Color color,
+            Vector2 origin,
+            Matrix transformation,
+            SpriteEffects effects,
+            float layerDepth
+        )
+        {
+            position.X += transformation.M41;
+            position.Y += transformation.M42;
+            DrawTransformed(texture, position, sourceRectangle, color, origin,
+                transformation.M11, transformation.M12, transformation.M21, transformation.M22, effects, layerDepth);
+        }
+
+        /// <summary>
+        /// Submit a sprite for drawing in the current batch, with destination vertices set manually.
+        /// </summary>
+        /// <param name="texture">A texture.</param>
+        /// <param name="destinationTL">The top-left vertex of the destination geometry.</param>
+        /// <param name="destinationTR">The top-right vertex of the destination geometry.</param>
+        /// <param name="destinationBL">The bottom-left vertex of the destination geometry.</param>
+        /// <param name="destinationBR">The bottom-right vertex of the destination geometry.</param>
+        /// <param name="sourceRectangle">An optional region on the texture which will be rendered. If null - draws full texture.</param>
+        /// <param name="color">A color mask.</param>
+        /// <param name="effects">Modificators for drawing. Can be combined.</param>
+        /// <param name="layerDepth">A depth of the layer of this sprite.</param>
+        public void DrawAtVerts(
+            Texture2D texture,
+            Vector2 destinationTL,
+            Vector2 destinationTR,
+            Vector2 destinationBL,
+            Vector2 destinationBR,
+            Rectangle? sourceRectangle,
+            Color color,
+            SpriteEffects effects,
+            float layerDepth
+        )
+        {
+            CheckValid(texture);
+
+            var item = _batcher.CreateBatchItem();
+            item.Texture = texture;
+
+            // set SortKey based on SpriteSortMode.
+            switch (_sortMode)
+            {
+            // Comparison of Texture objects.
+            case SpriteSortMode.Texture:
+                item.SortKey = texture.SortingKey;
+                break;
+            // Comparison of Depth
+            case SpriteSortMode.FrontToBack:
+                item.SortKey = layerDepth;
+                break;
+            // Comparison of Depth in reverse
+            case SpriteSortMode.BackToFront:
+                item.SortKey = -layerDepth;
+                break;
+            }
+
+            float w, h;
+            if (sourceRectangle.HasValue)
+            {
+                var srcRect = sourceRectangle.GetValueOrDefault();
+                w = srcRect.Width;
+                h = srcRect.Height;
+                _texCoordTL.X = srcRect.X * texture.TexelWidth;
+                _texCoordTL.Y = srcRect.Y * texture.TexelHeight;
+                _texCoordBR.X = (srcRect.X + srcRect.Width) * texture.TexelWidth;
+                _texCoordBR.Y = (srcRect.Y + srcRect.Height) * texture.TexelHeight;
+            }
+            else
+            {
+                w = texture.Width;
+                h = texture.Height;
+                _texCoordTL = Vector2.Zero;
+                _texCoordBR = Vector2.One;
+            }
+
+            if ((effects & SpriteEffects.FlipVertically) != 0)
+            {
+                var temp = _texCoordBR.Y;
+                _texCoordBR.Y = _texCoordTL.Y;
+                _texCoordTL.Y = temp;
+            }
+            if ((effects & SpriteEffects.FlipHorizontally) != 0)
+            {
+                var temp = _texCoordBR.X;
+                _texCoordBR.X = _texCoordTL.X;
+                _texCoordTL.X = temp;
+            }
+
+            item.SetVerts(
+                destinationTL.X,
+                destinationTL.Y,
+                destinationTR.X,
+                destinationTR.Y,
+                destinationBL.X,
+                destinationBL.Y,
+                destinationBR.X,
+                destinationBR.Y,
+                color,
+                _texCoordTL,
+                _texCoordBR,
+                layerDepth
+            );
+        }
+
+        // Mark the end of a draw operation for Immediate SpriteSortMode.
+        internal void FlushIfNeeded()
+        {
+            if (_sortMode == SpriteSortMode.Immediate)
+            {
+                _batcher.DrawBatch(_sortMode, _effect);
+            }
+        }
 
         /// <summary>
         /// Submit a sprite for drawing in the current batch.
@@ -425,12 +813,12 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="position">The drawing location on screen.</param>
         /// <param name="sourceRectangle">An optional region on the texture which will be rendered. If null - draws full texture.</param>
         /// <param name="color">A color mask.</param>
-		public void Draw (Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color)
-		{
-			CheckValid(texture);
+        public void Draw (Texture2D texture, Vector2 position, Rectangle? sourceRectangle, Color color)
+        {
+            CheckValid(texture);
             
-			var item = _batcher.CreateBatchItem();
-			item.Texture = texture;
+            var item = _batcher.CreateBatchItem();
+            item.Texture = texture;
             
             // set SortKey based on SpriteSortMode.
             item.SortKey = _sortMode == SpriteSortMode.Texture ? texture.SortingKey : 0;
@@ -463,7 +851,7 @@ namespace Microsoft.Xna.Framework.Graphics
                      0);
 
             FlushIfNeeded();
-		}
+        }
 
         /// <summary>
         /// Submit a sprite for drawing in the current batch.
@@ -472,12 +860,12 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="destinationRectangle">The drawing bounds on screen.</param>
         /// <param name="sourceRectangle">An optional region on the texture which will be rendered. If null - draws full texture.</param>
         /// <param name="color">A color mask.</param>
-		public void Draw (Texture2D texture, Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color)
-		{
+        public void Draw (Texture2D texture, Rectangle destinationRectangle, Rectangle? sourceRectangle, Color color)
+        {
             CheckValid(texture);
             
-			var item = _batcher.CreateBatchItem();
-			item.Texture = texture;
+            var item = _batcher.CreateBatchItem();
+            item.Texture = texture;
             
             // set SortKey based on SpriteSortMode.
             item.SortKey = _sortMode == SpriteSortMode.Texture ? texture.SortingKey : 0;
@@ -506,7 +894,7 @@ namespace Microsoft.Xna.Framework.Graphics
                      0);
             
             FlushIfNeeded();
-		}
+        }
 
         /// <summary>
         /// Submit a sprite for drawing in the current batch.
@@ -514,12 +902,12 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="texture">A texture.</param>
         /// <param name="position">The drawing location on screen.</param>
         /// <param name="color">A color mask.</param>
-		public void Draw (Texture2D texture, Vector2 position, Color color)
-		{
-			CheckValid(texture);
+        public void Draw (Texture2D texture, Vector2 position, Color color)
+        {
+            CheckValid(texture);
             
-			var item = _batcher.CreateBatchItem();
-			item.Texture = texture;
+            var item = _batcher.CreateBatchItem();
+            item.Texture = texture;
             
             // set SortKey based on SpriteSortMode.
             item.SortKey = _sortMode == SpriteSortMode.Texture ? texture.SortingKey : 0;
@@ -534,7 +922,7 @@ namespace Microsoft.Xna.Framework.Graphics
                      0);
 
             FlushIfNeeded();
-		}
+        }
 
         /// <summary>
         /// Submit a sprite for drawing in the current batch.
@@ -543,7 +931,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="destinationRectangle">The drawing bounds on screen.</param>
         /// <param name="color">A color mask.</param>
         public void Draw(Texture2D texture, Rectangle destinationRectangle, Color color)
-		{
+        {
             CheckValid(texture);
             
             var item = _batcher.CreateBatchItem();
@@ -562,7 +950,7 @@ namespace Microsoft.Xna.Framework.Graphics
                      0);
             
             FlushIfNeeded();
-		}
+        }
 
         /// <summary>
         /// Submit a text string of sprites for drawing in the current batch.
@@ -571,8 +959,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="text">The text which will be drawn.</param>
         /// <param name="position">The drawing location on screen.</param>
         /// <param name="color">A color mask.</param>
-		public unsafe void DrawString (SpriteFont spriteFont, string text, Vector2 position, Color color)
-		{
+        public unsafe void DrawString (SpriteFont spriteFont, string text, Vector2 position, Color color)
+        {
             CheckValid(spriteFont, text);
             
             float sortKey = (_sortMode == SpriteSortMode.Texture) ? spriteFont.Texture.SortingKey : 0;
@@ -638,9 +1026,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 offset.X += pCurrentGlyph->Width + pCurrentGlyph->RightSideBearing;
             }
 
-			// We need to flush if we're using Immediate sort mode.
-			FlushIfNeeded();
-		}
+            // We need to flush if we're using Immediate sort mode.
+            FlushIfNeeded();
+        }
 
         /// <summary>
         /// Submit a text string of sprites for drawing in the current batch.
@@ -654,13 +1042,13 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="scale">A scaling of this string.</param>
         /// <param name="effects">Modificators for drawing. Can be combined.</param>
         /// <param name="layerDepth">A depth of the layer of this string.</param>
-		public void DrawString (
-			SpriteFont spriteFont, string text, Vector2 position, Color color,
+        public void DrawString (
+            SpriteFont spriteFont, string text, Vector2 position, Color color,
             float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDepth)
-		{
-			var scaleVec = new Vector2(scale, scale);
+        {
+            var scaleVec = new Vector2(scale, scale);
             DrawString(spriteFont, text, position, color, rotation, origin, scaleVec, effects, layerDepth);
-		}
+        }
 
         /// <summary>
         /// Submit a text string of sprites for drawing in the current batch.
@@ -674,10 +1062,10 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="scale">A scaling of this string.</param>
         /// <param name="effects">Modificators for drawing. Can be combined.</param>
         /// <param name="layerDepth">A depth of the layer of this string.</param>
-		public unsafe void DrawString (
-			SpriteFont spriteFont, string text, Vector2 position, Color color,
+        public unsafe void DrawString (
+            SpriteFont spriteFont, string text, Vector2 position, Color color,
             float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth)
-		{
+        {
             CheckValid(spriteFont, text);
             
             float sortKey = 0;
@@ -803,15 +1191,15 @@ namespace Microsoft.Xna.Framework.Graphics
                 if ((effects & SpriteEffects.FlipVertically) != 0)
                 {
                     var temp = _texCoordBR.Y;
-				    _texCoordBR.Y = _texCoordTL.Y;
-				    _texCoordTL.Y = temp;
-			    }
+                    _texCoordBR.Y = _texCoordTL.Y;
+                    _texCoordTL.Y = temp;
+                }
                 if ((effects & SpriteEffects.FlipHorizontally) != 0)
                 {
                     var temp = _texCoordBR.X;
-				    _texCoordBR.X = _texCoordTL.X;
-				    _texCoordTL.X = temp;
-			    }
+                    _texCoordBR.X = _texCoordTL.X;
+                    _texCoordTL.X = temp;
+                }
 
                 if (rotation == 0f)
                 {
@@ -843,9 +1231,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 offset.X += pCurrentGlyph->Width + pCurrentGlyph->RightSideBearing;
             }
 
-			// We need to flush if we're using Immediate sort mode.
-			FlushIfNeeded();
-		}
+            // We need to flush if we're using Immediate sort mode.
+            FlushIfNeeded();
+        }
 
         /// <summary>
         /// Submit a text string of sprites for drawing in the current batch.
@@ -860,7 +1248,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="effects">Modificators for drawing. Can be combined.</param>
         /// <param name="layerDepth">A depth of the layer of this string.</param>
         /// <param name="rtl">Text is Right to Left.</param>
-		public unsafe void DrawString(
+        public unsafe void DrawString(
             SpriteFont spriteFont, string text, Vector2 position, Color color,
             float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth, bool rtl)
         {
@@ -1039,8 +1427,8 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="text">The text which will be drawn.</param>
         /// <param name="position">The drawing location on screen.</param>
         /// <param name="color">A color mask.</param>
-		public unsafe void DrawString (SpriteFont spriteFont, StringBuilder text, Vector2 position, Color color)
-		{
+        public unsafe void DrawString (SpriteFont spriteFont, StringBuilder text, Vector2 position, Color color)
+        {
             CheckValid(spriteFont, text);
             
             float sortKey =  (_sortMode == SpriteSortMode.Texture) ? spriteFont.Texture.SortingKey : 0;
@@ -1106,9 +1494,9 @@ namespace Microsoft.Xna.Framework.Graphics
                 offset.X += pCurrentGlyph->Width + pCurrentGlyph->RightSideBearing;
             }
 
-			// We need to flush if we're using Immediate sort mode.
-			FlushIfNeeded();
-		}
+            // We need to flush if we're using Immediate sort mode.
+            FlushIfNeeded();
+        }
 
         /// <summary>
         /// Submit a text string of sprites for drawing in the current batch.
@@ -1122,13 +1510,13 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="scale">A scaling of this string.</param>
         /// <param name="effects">Modificators for drawing. Can be combined.</param>
         /// <param name="layerDepth">A depth of the layer of this string.</param>
-		public void DrawString (
-			SpriteFont spriteFont, StringBuilder text, Vector2 position, Color color,
+        public void DrawString (
+            SpriteFont spriteFont, StringBuilder text, Vector2 position, Color color,
             float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDepth)
-		{
-			var scaleVec = new Vector2 (scale, scale);
+        {
+            var scaleVec = new Vector2 (scale, scale);
             DrawString(spriteFont, text, position, color, rotation, origin, scaleVec, effects, layerDepth);
-		}
+        }
 
         /// <summary>
         /// Submit a text string of sprites for drawing in the current batch.
@@ -1142,10 +1530,10 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="scale">A scaling of this string.</param>
         /// <param name="effects">Modificators for drawing. Can be combined.</param>
         /// <param name="layerDepth">A depth of the layer of this string.</param>
-		public unsafe void DrawString (
-			SpriteFont spriteFont, StringBuilder text, Vector2 position, Color color,
+        public unsafe void DrawString (
+            SpriteFont spriteFont, StringBuilder text, Vector2 position, Color color,
             float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth)
-		{
+        {
             CheckValid(spriteFont, text);
             
             float sortKey = 0;
@@ -1270,15 +1658,15 @@ namespace Microsoft.Xna.Framework.Graphics
                 if ((effects & SpriteEffects.FlipVertically) != 0)
                 {
                     var temp = _texCoordBR.Y;
-				    _texCoordBR.Y = _texCoordTL.Y;
-				    _texCoordTL.Y = temp;
-			    }
+                    _texCoordBR.Y = _texCoordTL.Y;
+                    _texCoordTL.Y = temp;
+                }
                 if ((effects & SpriteEffects.FlipHorizontally) != 0)
                 {
                     var temp = _texCoordBR.X;
-				    _texCoordBR.X = _texCoordTL.X;
-				    _texCoordTL.X = temp;
-			    }
+                    _texCoordBR.X = _texCoordTL.X;
+                    _texCoordTL.X = temp;
+                }
 
                 if (rotation == 0f)
                 {
@@ -1308,11 +1696,11 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
 
                 offset.X += pCurrentGlyph->Width + pCurrentGlyph->RightSideBearing;
-			}
+            }
 
-			// We need to flush if we're using Immediate sort mode.
-			FlushIfNeeded();
-		}
+            // We need to flush if we're using Immediate sort mode.
+            FlushIfNeeded();
+        }
 
         /// <summary>
         /// Submit a text string of sprites for drawing in the current batch.
@@ -1327,7 +1715,7 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="effects">Modificators for drawing. Can be combined.</param>
         /// <param name="layerDepth">A depth of the layer of this string.</param>
         /// <param name="rtl">Text is Right to Left.</param>
-		public unsafe void DrawString(
+        public unsafe void DrawString(
             SpriteFont spriteFont, StringBuilder text, Vector2 position, Color color,
             float rotation, Vector2 origin, Vector2 scale, SpriteEffects effects, float layerDepth, bool rtl)
         {
@@ -1518,6 +1906,6 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             base.Dispose(disposing);
         }
-	}
+    }
 }
 
