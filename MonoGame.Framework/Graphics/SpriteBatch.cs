@@ -419,10 +419,10 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="rotation">A rotation of this sprite.</param>
         /// <param name="origin">Center of the rotation. 0,0 by default.</param>
         /// <param name="scale">A scaling of this sprite.</param>
-        /// <param name="shear">A shearing for this sprite.</param>
+        /// <param name="shear">Shear factors for this sprite. Applied after scaling.</param>
         /// <param name="effects">Modificators for drawing. Can be combined.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
-        public void DrawWithShear(
+        public void DrawSheared(
             Texture2D texture,
             Vector2 position,
             Rectangle? sourceRectangle,
@@ -457,12 +457,15 @@ namespace Microsoft.Xna.Framework.Graphics
                 break;
             }
 
+            origin.X *= scale.X;
+            origin.Y *= scale.Y;
+
             float w, h;
             if (sourceRectangle.HasValue)
             {
                 var srcRect = sourceRectangle.GetValueOrDefault();
-                w = srcRect.Width;
-                h = srcRect.Height;
+                w = srcRect.Width * scale.X;
+                h = srcRect.Height * scale.Y;
                 _texCoordTL.X = srcRect.X * texture.TexelWidth;
                 _texCoordTL.Y = srcRect.Y * texture.TexelHeight;
                 _texCoordBR.X = (srcRect.X + srcRect.Width) * texture.TexelWidth;
@@ -470,8 +473,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                w = texture.Width;
-                h = texture.Height;
+                w = texture.Width * scale.X;
+                h = texture.Height * scale.Y;
                 _texCoordTL = Vector2.Zero;
                 _texCoordBR = Vector2.One;
             }
@@ -491,10 +494,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (shear.X == 0f && shear.Y == 0f)
             {
-                origin *= scale;
-                w *= scale.X;
-                h *= scale.Y;
-
                 if (rotation == 0f)
                 {
                     item.Set(
@@ -530,15 +529,13 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (rotation == 0f)
                 {
-                    item.SetScaleShear(
+                    item.SetShear(
                         position.X,
                         position.Y,
                         -origin.X,
                         -origin.Y,
                         w,
                         h,
-                        scale.X,
-                        scale.Y,
                         shear.X,
                         shear.Y,
                         color,
@@ -549,15 +546,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
                 else
                 {
-                    item.SetScaleShearRotate(
+                    item.SetShearRotate(
                         position.X,
                         position.Y,
                         -origin.X,
                         -origin.Y,
                         w,
                         h,
-                        scale.X,
-                        scale.Y,
                         shear.X,
                         shear.Y,
                         MathF.Sin(rotation),
@@ -1100,10 +1095,10 @@ namespace Microsoft.Xna.Framework.Graphics
         /// <param name="rotation">A rotation of this sprite.</param>
         /// <param name="origin">Center of the rotation. 0,0 by default.</param>
         /// <param name="scale">A scaling of this sprite.</param>
-        /// <param name="shear">A shearing for this sprite.</param>
+        /// <param name="shear">Shear factors for this sprite. Applied after scaling.</param>
         /// <param name="effects">Modificators for drawing. Can be combined.</param>
         /// <param name="layerDepth">A depth of the layer of this sprite.</param>
-        public void DrawWithShear(
+        public void DrawSheared(
             Texture2D texture,
             Vector2 position,
             Rectangle? sourceRectangle,
@@ -1141,12 +1136,15 @@ namespace Microsoft.Xna.Framework.Graphics
                 break;
             }
 
+            origin.X *= scale.X;
+            origin.Y *= scale.Y;
+
             float w, h;
             if (sourceRectangle.HasValue)
             {
                 var srcRect = sourceRectangle.GetValueOrDefault();
-                w = srcRect.Width;
-                h = srcRect.Height;
+                w = srcRect.Width * scale.X;
+                h = srcRect.Height * scale.Y;
                 _texCoordTL.X = srcRect.X * texture.TexelWidth;
                 _texCoordTL.Y = srcRect.Y * texture.TexelHeight;
                 _texCoordBR.X = (srcRect.X + srcRect.Width) * texture.TexelWidth;
@@ -1154,8 +1152,8 @@ namespace Microsoft.Xna.Framework.Graphics
             }
             else
             {
-                w = texture.Width;
-                h = texture.Height;
+                w = texture.Width * scale.X;
+                h = texture.Height * scale.Y;
                 _texCoordTL = Vector2.Zero;
                 _texCoordBR = Vector2.One;
             }
@@ -1175,10 +1173,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
             if (shear.X == 0f && shear.Y == 0f)
             {
-                origin *= scale;
-                w *= scale.X;
-                h *= scale.Y;
-
                 if (rotation == 0f)
                 {
                     item.SetGradient(
@@ -1220,15 +1214,13 @@ namespace Microsoft.Xna.Framework.Graphics
             {
                 if (rotation == 0f)
                 {
-                    item.SetScaleShear(
+                    item.SetShear(
                         position.X,
                         position.Y,
                         -origin.X,
                         -origin.Y,
                         w,
                         h,
-                        scale.X,
-                        scale.Y,
                         shear.X,
                         shear.Y,
                         colorTL,
@@ -1242,15 +1234,13 @@ namespace Microsoft.Xna.Framework.Graphics
                 }
                 else
                 {
-                    item.SetScaleShearRotate(
+                    item.SetShearRotate(
                         position.X,
                         position.Y,
                         -origin.X,
                         -origin.Y,
                         w,
                         h,
-                        scale.X,
-                        scale.Y,
                         shear.X,
                         shear.Y,
                         MathF.Sin(rotation),

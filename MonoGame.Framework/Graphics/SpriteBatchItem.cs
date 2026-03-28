@@ -88,53 +88,46 @@ namespace Microsoft.Xna.Framework.Graphics
             vertexBR.TextureCoordinate.Y = texCoordBR.Y;
         }
 
-        public void SetScaleShear(float x, float y, float dx, float dy, float w, float h,
-            float scX, float scY, float shX, float shY,
+        public void SetShear(float x, float y, float dx, float dy, float w, float h, float shX, float shY,
             Color color, Vector2 texCoordTL, Vector2 texCoordBR, float depth)
         {
-            float scShX = scX * shX;
-            float scShY = scY * shY;
-
-            vertexTL.Position.X = x + (dx * scX) + (dy * scShX);
-            vertexTL.Position.Y = y + (dx * scShY) + (dy * scY);
+            vertexTL.Position.X = x + dx + (dy * shX);
+            vertexTL.Position.Y = y + (dx * shY) + dy;
             vertexTL.Position.Z = depth;
             vertexTL.Color = color;
             vertexTL.TextureCoordinate.X = texCoordTL.X;
             vertexTL.TextureCoordinate.Y = texCoordTL.Y;
 
-            vertexTR.Position.X = x + ((dx + w) * scX) + (dy * scShX);
-            vertexTR.Position.Y = y + ((dx + w) * scShY) + (dy * scY);
+            vertexTR.Position.X = x + (dx + w) + (dy * shX);
+            vertexTR.Position.Y = y + ((dx + w) * shY) + dy;
             vertexTR.Position.Z = depth;
             vertexTR.Color = color;
             vertexTR.TextureCoordinate.X = texCoordBR.X;
             vertexTR.TextureCoordinate.Y = texCoordTL.Y;
 
-            vertexBL.Position.X = x + (dx * scX) + ((dy + h) * scShX);
-            vertexBL.Position.Y = y + (dx * scShY) + ((dy + h) * scY);
+            vertexBL.Position.X = x + dx + ((dy + h) * shX);
+            vertexBL.Position.Y = y + (dx * shY) + (dy + h);
             vertexBL.Position.Z = depth;
             vertexBL.Color = color;
             vertexBL.TextureCoordinate.X = texCoordTL.X;
             vertexBL.TextureCoordinate.Y = texCoordBR.Y;
 
-            vertexBR.Position.X = x + ((dx + w) * scX) + ((dy + h) * scShX);
-            vertexBR.Position.Y = y + ((dx + w) * scShY) + ((dy + h) * scY);
+            vertexBR.Position.X = x + (dx + w) + ((dy + h) * shX);
+            vertexBR.Position.Y = y + ((dx + w) * shY) + (dy + h);
             vertexBR.Position.Z = depth;
             vertexBR.Color = color;
             vertexBR.TextureCoordinate.X = texCoordBR.X;
             vertexBR.TextureCoordinate.Y = texCoordBR.Y;
         }
 
-        public void SetScaleShearRotate(float x, float y, float dx, float dy, float w, float h,
-            float scX, float scY, float shX, float shY, float sin, float cos,
+        public void SetShearRotate(float x, float y, float dx, float dy, float w, float h, float shX, float shY, float sin, float cos,
             Color color, Vector2 texCoordTL, Vector2 texCoordBR, float depth)
         {
-            float scShX = scX * shX;
-            float scShY = scY * shY;
             float dx2;
             float dy2;
 
-            dx2 = (dx * scX) + (dy * scShX);
-            dy2 = (dx * scShY) + (dy * scY);
+            dx2 = dx + (dy * shX);
+            dy2 = (dx * shY) + dy;
             vertexTL.Position.X = x + (dx2 * cos) - (dy2 * sin);
             vertexTL.Position.Y = y + (dx2 * sin) + (dy2 * cos);
             vertexTL.Position.Z = depth;
@@ -142,8 +135,8 @@ namespace Microsoft.Xna.Framework.Graphics
             vertexTL.TextureCoordinate.X = texCoordTL.X;
             vertexTL.TextureCoordinate.Y = texCoordTL.Y;
 
-            dx2 = ((dx + w) * scX) + (dy * scShX);
-            dy2 = ((dx + w) * scShY) + (dy * scY);
+            dx2 = (dx + w) + (dy * shX);
+            dy2 = ((dx + w) * shY) + dy;
             vertexTR.Position.X = x + (dx2 * cos) - (dy2 * sin);
             vertexTR.Position.Y = y + (dx2 * sin) + (dy2 * cos);
             vertexTR.Position.Z = depth;
@@ -151,8 +144,8 @@ namespace Microsoft.Xna.Framework.Graphics
             vertexTR.TextureCoordinate.X = texCoordBR.X;
             vertexTR.TextureCoordinate.Y = texCoordTL.Y;
 
-            dx2 = (dx * scX) + ((dy + h) * scShX);
-            dy2 = (dx * scShY) + ((dy + h) * scY);
+            dx2 = dx + ((dy + h) * shX);
+            dy2 = (dx * shY) + (dy + h);
             vertexBL.Position.X = x + (dx2 * cos) - (dy2 * sin);
             vertexBL.Position.Y = y + (dx2 * sin) + (dy2 * cos);
             vertexBL.Position.Z = depth;
@@ -160,8 +153,8 @@ namespace Microsoft.Xna.Framework.Graphics
             vertexBL.TextureCoordinate.X = texCoordTL.X;
             vertexBL.TextureCoordinate.Y = texCoordBR.Y;
 
-            dx2 = ((dx + w) * scX) + ((dy + h) * scShX);
-            dy2 = ((dx + w) * scShY) + ((dy + h) * scY);
+            dx2 = (dx + w) + ((dy + h) * shX);
+            dy2 = ((dx + w) * shY) + (dy + h);
             vertexBR.Position.X = x + (dx2 * cos) - (dy2 * sin);
             vertexBR.Position.Y = y + (dx2 * sin) + (dy2 * cos);
             vertexBR.Position.Z = depth;
@@ -299,53 +292,46 @@ namespace Microsoft.Xna.Framework.Graphics
             vertexBR.TextureCoordinate.Y = texCoordBR.Y;
         }
 
-        public void SetScaleShear(float x, float y, float dx, float dy, float w, float h,
-            float scX, float scY, float shX, float shY,
+        public void SetShear(float x, float y, float dx, float dy, float w, float h, float shX, float shY,
             Color colorTL, Color colorTR, Color colorBL, Color colorBR, Vector2 texCoordTL, Vector2 texCoordBR, float depth)
         {
-            float scShX = scX * shX;
-            float scShY = scY * shY;
-
-            vertexTL.Position.X = x + (dx * scX) + (dy * scShX);
-            vertexTL.Position.Y = y + (dx * scShY) + (dy * scY);
+            vertexTL.Position.X = x + dx + (dy * shX);
+            vertexTL.Position.Y = y + (dx * shY) + dy;
             vertexTL.Position.Z = depth;
             vertexTL.Color = colorTL;
             vertexTL.TextureCoordinate.X = texCoordTL.X;
             vertexTL.TextureCoordinate.Y = texCoordTL.Y;
 
-            vertexTR.Position.X = x + ((dx + w) * scX) + (dy * scShX);
-            vertexTR.Position.Y = y + ((dx + w) * scShY) + (dy * scY);
+            vertexTR.Position.X = x + (dx + w) + (dy * shX);
+            vertexTR.Position.Y = y + ((dx + w) * shY) + dy;
             vertexTR.Position.Z = depth;
             vertexTR.Color = colorTR;
             vertexTR.TextureCoordinate.X = texCoordBR.X;
             vertexTR.TextureCoordinate.Y = texCoordTL.Y;
 
-            vertexBL.Position.X = x + (dx * scX) + ((dy + h) * scShX);
-            vertexBL.Position.Y = y + (dx * scShY) + ((dy + h) * scY);
+            vertexBL.Position.X = x + dx + ((dy + h) * shX);
+            vertexBL.Position.Y = y + (dx * shY) + (dy + h);
             vertexBL.Position.Z = depth;
             vertexBL.Color = colorBL;
             vertexBL.TextureCoordinate.X = texCoordTL.X;
             vertexBL.TextureCoordinate.Y = texCoordBR.Y;
 
-            vertexBR.Position.X = x + ((dx + w) * scX) + ((dy + h) * scShX);
-            vertexBR.Position.Y = y + ((dx + w) * scShY) + ((dy + h) * scY);
+            vertexBR.Position.X = x + (dx + w) + ((dy + h) * shX);
+            vertexBR.Position.Y = y + ((dx + w) * shY) + (dy + h);
             vertexBR.Position.Z = depth;
             vertexBR.Color = colorBR;
             vertexBR.TextureCoordinate.X = texCoordBR.X;
             vertexBR.TextureCoordinate.Y = texCoordBR.Y;
         }
 
-        public void SetScaleShearRotate(float x, float y, float dx, float dy, float w, float h,
-            float scX, float scY, float shX, float shY, float sin, float cos,
+        public void SetShearRotate(float x, float y, float dx, float dy, float w, float h, float shX, float shY, float sin, float cos,
             Color colorTL, Color colorTR, Color colorBL, Color colorBR, Vector2 texCoordTL, Vector2 texCoordBR, float depth)
         {
-            float scShX = scX * shX;
-            float scShY = scY * shY;
             float dx2;
             float dy2;
 
-            dx2 = (dx * scX) + (dy * scShX);
-            dy2 = (dx * scShY) + (dy * scY);
+            dx2 = dx + (dy * shX);
+            dy2 = (dx * shY) + dy;
             vertexTL.Position.X = x + (dx2 * cos) - (dy2 * sin);
             vertexTL.Position.Y = y + (dx2 * sin) + (dy2 * cos);
             vertexTL.Position.Z = depth;
@@ -353,8 +339,8 @@ namespace Microsoft.Xna.Framework.Graphics
             vertexTL.TextureCoordinate.X = texCoordTL.X;
             vertexTL.TextureCoordinate.Y = texCoordTL.Y;
 
-            dx2 = ((dx + w) * scX) + (dy * scShX);
-            dy2 = ((dx + w) * scShY) + (dy * scY);
+            dx2 = (dx + w) + (dy * shX);
+            dy2 = ((dx + w) * shY) + dy;
             vertexTR.Position.X = x + (dx2 * cos) - (dy2 * sin);
             vertexTR.Position.Y = y + (dx2 * sin) + (dy2 * cos);
             vertexTR.Position.Z = depth;
@@ -362,8 +348,8 @@ namespace Microsoft.Xna.Framework.Graphics
             vertexTR.TextureCoordinate.X = texCoordBR.X;
             vertexTR.TextureCoordinate.Y = texCoordTL.Y;
 
-            dx2 = (dx * scX) + ((dy + h) * scShX);
-            dy2 = (dx * scShY) + ((dy + h) * scY);
+            dx2 = dx + ((dy + h) * shX);
+            dy2 = (dx * shY) + (dy + h);
             vertexBL.Position.X = x + (dx2 * cos) - (dy2 * sin);
             vertexBL.Position.Y = y + (dx2 * sin) + (dy2 * cos);
             vertexBL.Position.Z = depth;
@@ -371,8 +357,8 @@ namespace Microsoft.Xna.Framework.Graphics
             vertexBL.TextureCoordinate.X = texCoordTL.X;
             vertexBL.TextureCoordinate.Y = texCoordBR.Y;
 
-            dx2 = ((dx + w) * scX) + ((dy + h) * scShX);
-            dy2 = ((dx + w) * scShY) + ((dy + h) * scY);
+            dx2 = (dx + w) + ((dy + h) * shX);
+            dy2 = ((dx + w) * shY) + (dy + h);
             vertexBR.Position.X = x + (dx2 * cos) - (dy2 * sin);
             vertexBR.Position.Y = y + (dx2 * sin) + (dy2 * cos);
             vertexBR.Position.Z = depth;
