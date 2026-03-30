@@ -410,6 +410,127 @@ namespace Microsoft.Xna.Framework.Graphics
         }
 
         /// <summary>
+        /// Submit a sprite for drawing in the current batch, to a destination with a set position, width and height.
+        /// </summary>
+        /// <param name="texture">A texture.</param>
+        /// <param name="destinationPosition">The position of the drawing bounds.</param>
+        /// <param name="destinationWidth">The width of the drawing bounds.</param>
+        /// <param name="destinationHeight">The height of the drawing bounds.</param>
+        /// <param name="sourceRectangle">An optional region on the texture which will be rendered. If null - draws full texture.</param>
+        /// <param name="color">A color mask.</param>
+        /// <param name="rotation">A rotation of this sprite.</param>
+        /// <param name="origin">Center of the rotation. 0,0 by default.</param>
+        /// <param name="effects">Modificators for drawing. Can be combined.</param>
+        /// <param name="layerDepth">A depth of the layer of this sprite.</param>
+        public void DrawToDest(
+            Texture2D texture,
+            Vector2 destinationPosition,
+            float destinationWidth,
+            float destinationHeight,
+            Rectangle? sourceRectangle,
+            Color color,
+            float rotation,
+            Vector2 origin,
+            SpriteEffects effects,
+            float layerDepth
+        )
+        {
+            CheckValid(texture);
+            
+            var item = _batcher.CreateBatchItem();
+            item.Texture = texture;
+
+            // set SortKey based on SpriteSortMode.
+            switch ( _sortMode )
+            {
+                // Comparison of Texture objects.
+                case SpriteSortMode.Texture:
+                    item.SortKey = texture.SortingKey;
+                    break;
+                // Comparison of Depth
+                case SpriteSortMode.FrontToBack:
+                    item.SortKey = layerDepth;
+                    break;
+                // Comparison of Depth in reverse
+                case SpriteSortMode.BackToFront:
+                    item.SortKey = -layerDepth;
+                    break;
+            }
+
+            if (sourceRectangle.HasValue)
+            {
+                var srcRect = sourceRectangle.GetValueOrDefault();
+                _texCoordTL.X = srcRect.X * texture.TexelWidth;
+                _texCoordTL.Y = srcRect.Y * texture.TexelHeight;
+                _texCoordBR.X = (srcRect.X + srcRect.Width) * texture.TexelWidth;
+                _texCoordBR.Y = (srcRect.Y + srcRect.Height) * texture.TexelHeight;
+
+                if(srcRect.Width != 0)
+                    origin.X = origin.X * destinationWidth / srcRect.Width;
+                else
+                    origin.X = origin.X * destinationWidth * texture.TexelWidth;
+                if(srcRect.Height != 0)
+                    origin.Y = origin.Y * destinationHeight / srcRect.Height; 
+                else
+                    origin.Y = origin.Y * destinationHeight * texture.TexelHeight;
+            }
+            else
+            {
+                _texCoordTL = Vector2.Zero;
+                _texCoordBR = Vector2.One;
+                
+                origin.X = origin.X * destinationWidth  * texture.TexelWidth;
+                origin.Y = origin.Y * destinationHeight * texture.TexelHeight;
+            }
+            
+            if ((effects & SpriteEffects.FlipVertically) != 0)
+            {
+                var temp = _texCoordBR.Y;
+                _texCoordBR.Y = _texCoordTL.Y;
+                _texCoordTL.Y = temp;
+            }
+            if ((effects & SpriteEffects.FlipHorizontally) != 0)
+            {
+                var temp = _texCoordBR.X;
+                _texCoordBR.X = _texCoordTL.X;
+                _texCoordTL.X = temp;
+            }
+
+            if (rotation == 0f)
+            {
+                item.Set(
+                    destinationPosition.X - origin.X,
+                    destinationPosition.Y - origin.Y,
+                    destinationWidth,
+                    destinationHeight,
+                    color,
+                    _texCoordTL,
+                    _texCoordBR,
+                    layerDepth
+                );
+            }
+            else
+            {
+                item.Set(
+                    destinationPosition.X,
+                    destinationPosition.Y,
+                    -origin.X,
+                    -origin.Y,
+                    destinationWidth,
+                    destinationHeight,
+                    MathF.Sin(rotation),
+                    MathF.Cos(rotation),
+                    color,
+                    _texCoordTL,
+                    _texCoordBR,
+                    layerDepth
+                );
+            }
+
+            FlushIfNeeded();
+        }
+
+        /// <summary>
         /// Submit a sprite for drawing in the current batch, with shearing applied to it.
         /// </summary>
         /// <param name="texture">A texture.</param>
@@ -1067,6 +1188,139 @@ namespace Microsoft.Xna.Framework.Graphics
                     -origin.Y,
                     destinationRectangle.Width,
                     destinationRectangle.Height,
+                    MathF.Sin(rotation),
+                    MathF.Cos(rotation),
+                    colorTL,
+                    colorTR,
+                    colorBL,
+                    colorBR,
+                    _texCoordTL,
+                    _texCoordBR,
+                    layerDepth
+                );
+            }
+
+            FlushIfNeeded();
+        }
+
+        /// <summary>
+        /// Submit a sprite for drawing in the current batch, to a destination with a set position, width and height.
+        /// </summary>
+        /// <param name="texture">A texture.</param>
+        /// <param name="destinationPosition">The position of the drawing bounds.</param>
+        /// <param name="destinationWidth">The width of the drawing bounds.</param>
+        /// <param name="destinationHeight">The height of the drawing bounds.</param>
+        /// <param name="sourceRectangle">An optional region on the texture which will be rendered. If null - draws full texture.</param>
+        /// <param name="colorTL">A color mask for the top-left vertex.</param>
+        /// <param name="colorTR">A color mask for the top-right vertex.</param>
+        /// <param name="colorBL">A color mask for the bottom-left vertex.</param>
+        /// <param name="colorBR">A color mask for the bottom-right vertex.</param>
+        /// <param name="rotation">A rotation of this sprite.</param>
+        /// <param name="origin">Center of the rotation. 0,0 by default.</param>
+        /// <param name="effects">Modificators for drawing. Can be combined.</param>
+        /// <param name="layerDepth">A depth of the layer of this sprite.</param>
+        public void DrawToDest(
+            Texture2D texture,
+            Vector2 destinationPosition,
+            float destinationWidth,
+            float destinationHeight,
+            Rectangle? sourceRectangle,
+            Color colorTL,
+            Color colorTR,
+            Color colorBL,
+            Color colorBR,
+            float rotation,
+            Vector2 origin,
+            SpriteEffects effects,
+            float layerDepth
+        )
+        {
+            CheckValid(texture);
+            
+            var item = _batcher.CreateBatchItem();
+            item.Texture = texture;
+
+            // set SortKey based on SpriteSortMode.
+            switch ( _sortMode )
+            {
+                // Comparison of Texture objects.
+                case SpriteSortMode.Texture:
+                    item.SortKey = texture.SortingKey;
+                    break;
+                // Comparison of Depth
+                case SpriteSortMode.FrontToBack:
+                    item.SortKey = layerDepth;
+                    break;
+                // Comparison of Depth in reverse
+                case SpriteSortMode.BackToFront:
+                    item.SortKey = -layerDepth;
+                    break;
+            }
+
+            if (sourceRectangle.HasValue)
+            {
+                var srcRect = sourceRectangle.GetValueOrDefault();
+                _texCoordTL.X = srcRect.X * texture.TexelWidth;
+                _texCoordTL.Y = srcRect.Y * texture.TexelHeight;
+                _texCoordBR.X = (srcRect.X + srcRect.Width) * texture.TexelWidth;
+                _texCoordBR.Y = (srcRect.Y + srcRect.Height) * texture.TexelHeight;
+
+                if(srcRect.Width != 0)
+                    origin.X = origin.X * destinationWidth / srcRect.Width;
+                else
+                    origin.X = origin.X * destinationWidth * texture.TexelWidth;
+                if(srcRect.Height != 0)
+                    origin.Y = origin.Y * destinationHeight / srcRect.Height; 
+                else
+                    origin.Y = origin.Y * destinationHeight * texture.TexelHeight;
+            }
+            else
+            {
+                _texCoordTL = Vector2.Zero;
+                _texCoordBR = Vector2.One;
+                
+                origin.X = origin.X * destinationWidth  * texture.TexelWidth;
+                origin.Y = origin.Y * destinationHeight * texture.TexelHeight;
+            }
+            
+            if ((effects & SpriteEffects.FlipVertically) != 0)
+            {
+                var temp = _texCoordBR.Y;
+                _texCoordBR.Y = _texCoordTL.Y;
+                _texCoordTL.Y = temp;
+            }
+            if ((effects & SpriteEffects.FlipHorizontally) != 0)
+            {
+                var temp = _texCoordBR.X;
+                _texCoordBR.X = _texCoordTL.X;
+                _texCoordTL.X = temp;
+            }
+
+            if (rotation == 0f)
+            {
+                item.SetGradient(
+                    destinationPosition.X - origin.X,
+                    destinationPosition.Y - origin.Y,
+                    destinationWidth,
+                    destinationHeight,
+                    colorTL,
+                    colorTR,
+                    colorBL,
+                    colorBR,
+                    _texCoordTL,
+                    _texCoordBR,
+                    layerDepth
+                );
+            }
+            else
+            {
+                item.SetGradient(
+                    destinationPosition.X,
+                    destinationPosition.Y,
+                    -origin.X,
+                    -origin.Y,
+                    destinationWidth,
+                    destinationHeight,
                     MathF.Sin(rotation),
                     MathF.Cos(rotation),
                     colorTL,
